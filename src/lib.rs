@@ -37,3 +37,36 @@ mod tests {
         assert_eq!(84, multiply(mock, 42));
     }
 }
+
+use mockall::automock;
+#[automock]
+pub mod mockable_addition {
+    pub fn addition(x: u32) -> u32 {
+        x
+    }
+}
+
+mod mockable_multiply {
+    use super::mockable_addition;
+
+    pub fn multiply(y: u32) -> u32 {
+        mockable_addition::addition(1) * y
+    }
+}
+
+#[cfg(test)]
+mod multiply_tests {
+    use mockall_double::double;
+
+    #[double]
+    use crate::mockable_addition;
+
+    use crate::mockable_multiply::multiply;
+
+    #[test]
+    fn multiply_test() {
+        let ctx = mockable_addition::addition_context();
+        ctx.expect().returning(|x| x + 1);
+        assert_eq!(4, multiply(2));
+    }
+}
