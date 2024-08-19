@@ -47,8 +47,19 @@ pub mod mockable_addition {
 }
 
 mod mockable_multiply {
+
+    use mockall_double::double;
+
+    #[double]
     use super::mockable_addition;
 
+    // これでもよい
+    // #[cfg(test)]
+    // use super::mock_mockable_addition as mockable_addition;
+    // #[cfg(not(test))]
+    // use super::mockable_addition;
+
+    // pub async fn multiply(y: u32) -> u32 {
     pub fn multiply(y: u32) -> u32 {
         mockable_addition::addition(1) * y
     }
@@ -63,8 +74,19 @@ mod multiply_tests {
 
     use crate::mockable_multiply::multiply;
 
+    // async関数でもモックできる
+    // #[tokio::test]
+    // async fn multiply_test() {
+    //     // #[test]
+    //     // fn multiply_test() {
+    //     let ctx = mockable_addition::addition_context();
+    //     ctx.expect().returning(|x| x + 1);
+    //     assert_eq!(4, multiply(2).await);
+    // }
     #[test]
     fn multiply_test() {
+        // #[test]
+        // fn multiply_test() {
         let ctx = mockable_addition::addition_context();
         ctx.expect().returning(|x| x + 1);
         assert_eq!(4, multiply(2));
