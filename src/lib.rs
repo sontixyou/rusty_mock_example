@@ -46,7 +46,7 @@ pub mod mockable_addition {
     }
 }
 
-mod mockable_multiply {
+pub mod mockable_multiply {
 
     use mockall_double::double;
 
