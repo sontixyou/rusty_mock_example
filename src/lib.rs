@@ -59,6 +59,7 @@ mod mockable_multiply {
     // #[cfg(not(test))]
     // use super::mockable_addition;
 
+    // async 関数でもモックできる
     // pub async fn multiply(y: u32) -> u32 {
     pub fn multiply(y: u32) -> u32 {
         mockable_addition::addition(1) * y
